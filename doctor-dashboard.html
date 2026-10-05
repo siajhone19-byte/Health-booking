@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Dashboard | Medical Health Center</title>
+  <link rel="stylesheet" href="doctor-dashboard.css">
+  <script src="app.js" defer></script>
+</head>
+<body class="doctor-body">
+  <header class="doctor-header"><a class="brand" href="doctor-dashboard.html"><img src="logo.jpg" alt="Medical Health Center logo"><span class="brand-text"><strong>MEDICAL</strong><span>HEALTH CENTER</span></span></a><div class="doctor-header-actions"><span id="selected-doctor-name">Doctor</span><a href="doctor-login.html" data-doctor-logout>Log out</a></div></header>
+  <main class="doctor-content">
+      <header class="doctor-topbar"><div><h1>Doctor Dashboard</h1>
+        <p>Sunday, September 6, 2026</p></div></header>
+      <section class="doctor-dashboard-main">
+        <div class="doctor-welcome"><div><div class="eyebrow">Medical staff portal</div>
+        <h2>Good morning, Doctor.</h2><p>Here is your clinic schedule and patient workload for today.</p></div>
+        <div class="doctor-date">Today<br><strong>September 6</strong></div></div>
+        <div class="stats doctor-stats"><div class="stat"><span>Today’s appointments</span>
+          <strong id="doctor-today-count">0</strong><small>Scheduled visits</small></div>
+          <div class="stat"><span>Completed</span><strong id="doctor-completed-count">0</strong>
+            <small>Finished visits</small></div>
+          <div class="stat"><span>Cancelled</span><strong id="doctor-cancelled-count">0</strong>
+            <small>Cancelled visits</small></div></div>
+        <section class="doctor-appointments-panel"><div class="panel-heading">
+            <h2>Assigned appointments</h2><span class="scheduled-count" id="doctor-schedule-count">0 scheduled</span></div>
+            <div class="doctor-table-wrap"><table><thead><tr><th>Patient</th><th>Age</th><th>Blood type</th><th>Condition</th><th>Service</th><th>Date & time</th>
+              <th>Contact</th><th>Diagnosis</th><th>Prescription</th><th>Status</th></tr></thead><tbody id="doctor-appointments-body"><tr><td colspan="10" class="empty-state">No appointments yet.</td></tr></tbody></table></div></section>
+      </section>
+  </main>
+</body>
+</html>

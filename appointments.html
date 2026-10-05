@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointments | Medical Health Center</title>
+  <link rel="stylesheet" href="appointments.css">
+  <script src="app.js" defer></script>
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="admin.html"><img src="logo.jpg" alt="Medical Health Center logo"><span><strong>HealthCenter</strong><small>Clinic System</small></span></a>
+      <nav class="admin-nav" aria-label="Admin navigation">
+        <a href="admin.html"><span></span>Dashboard</a>
+        <a href="patients.html"><span></span>Patients</a>
+        <a class="active" href="appointments.html"><span></span>Appointments</a>
+        <a href="doctors.html"><span></span>Doctors</a>
+        <a href="medical-records.html"><span></span>Medical Records</a>
+        <a href="user-management.html"><span></span>User Management</a>
+      </nav>
+      <div class="admin-profile-wrap">
+        <button class="admin-profile" type="button" data-profile-toggle aria-expanded="false"><span class="profile-badge">AD</span><span><strong>Admin</strong><small>Super User</small></span><span class="profile-chevron">⌄</span></button>
+        <a class="profile-logout" href="admin-login.html" data-admin-logout>Log out</a>
+      </div>
+    </aside>
+    <main class="admin-content">
+      <header class="admin-topbar"><div><h1>Appointments</h1><p>Sunday, September 6, 2026</p></div><div class="admin-tools"><div class="admin-search">⌕ <span>Search patients, records...</span></div><span class="notification"><i></i></span></div></header>
+      <section class="appointment-main">
+        <div class="appointment-toolbar"><div class="appointment-filters" role="group" aria-label="Appointment filters"><button class="filter-button active" type="button" data-filter="All">All</button><button class="filter-button" type="button" data-filter="Confirmed">Confirmed</button><button class="filter-button" type="button" data-filter="Pending">Pending</button><button class="filter-button" type="button" data-filter="Cancelled">Cancelled</button></div></div>
+        <section class="appointment-panel"><div class="appointment-table-wrap"><table><thead><tr><th>ID</th><th>Patient</th><th>Doctor / contact</th><th>Diagnosis</th><th>Prescription</th><th>Date & time</th><th>Type</th><th>Status</th><th>Action</th></tr></thead><tbody id="all-appointments-body"><tr><td colspan="9" class="empty-state">No appointments yet.</td></tr></tbody></table></div></section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

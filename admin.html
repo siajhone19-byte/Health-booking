@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointments | Medical Health Center</title>
+  <link rel="stylesheet" href="admin.css">
+  <script src="app.js" defer></script>
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="admin.html"><img src="logo.jpg" alt="Medical Health Center logo"><span><strong>HealthCenter</strong>
+        <small>Clinic System</small></span></a>
+      <nav class="admin-nav" aria-label="Admin navigation">
+        <a class="active" href="admin.html"><span></span>Dashboard</a>
+        <a href="patients.html"><span></span>Patients</a>
+        <a href="appointments.html"><span></span>Appointments</a>
+        <a href="doctors.html"><span></span>Doctors</a>
+        <a href="medical-records.html"><span></span>Medical Records</a>
+        <a href="user-management.html"><span></span>User Management</a>
+      </nav>
+      <div class="admin-profile-wrap">
+        <button class="admin-profile" type="button" data-profile-toggle aria-expanded="false"><span class="profile-badge">AD</span>
+            <span><strong>Admin</strong>
+                <small>Super User</small></span>
+                <span class="profile-chevron">⌄</span></button>
+        <a class="profile-logout" href="admin-login.html" data-admin-logout>Log out</a>
+      </div>
+    </aside>
+    <main class="admin-content">
+      <header class="admin-topbar"><div><h1>Dashboard</h1>
+        <p>Sunday, September 6, 2026</p></div>
+        <div class="admin-tools"><div class="admin-search">⌕ 
+            <span>Search patients, records...</span></div>
+            <span class="notification"><i></i></span></div></header>
+      <section class="admin-main">
+        <div class="admin-welcome"><div><h2>Good morning, Administrator</h2>
+            <p>Here’s what’s happening at HealthCenter Clinic today.</p></div>
+            <div class="welcome-count"><strong id="today-appointments">0</strong>
+                <span>appointments today</span></div></div>
+        <div class="stats"><div class="stat"><span>Total patients</span>
+            <strong id="total-appointments">0</strong>
+            <small>From appointment requests</small>
+            <b class="stat-icon patient-icon"></b></div>
+            <div class="stat"><span>Today's appointments</span>
+                <strong id="pending-appointments">0</strong>
+                <small>Waiting for confirmation</small>
+                <b class="stat-icon calendar-icon"></b></div>
+                <div class="stat"><span>Active doctors</span>
+                    <strong>0</strong><small>No doctor records yet</small>
+                  <b class="stat-icon doctor-icon"></b></div>
+                <div class="stat"><span>Completed appointments</span>
+                  <strong id="completed-appointments">0</strong>
+                  <small>Finished visits</small>
+                  <b class="stat-icon completed-icon">✓</b></div></div>
+        <section class="appointments-panel" id="appointments"><div class="panel-heading"><h2>Today's Appointments</h2><span class="scheduled-count" id="scheduled-count">0 scheduled</span></div><div class="table-wrap"><table><thead><tr><th>Patient</th><th>Service</th><th>Health personnel</th><th>Diagnosis</th><th>Prescription</th><th>Date & time</th><th>Contact</th><th>Status</th></tr></thead><tbody id="appointments-body"><tr><td colspan="8" class="empty-state">No appointments yet.</td></tr></tbody></table></div></section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctors | Medical Health Center</title>
+  <link rel="stylesheet" href="doctors.css">
+  <script src="app.js" defer></script>
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="admin.html"><img src="logo.jpg" alt="Medical Health Center logo"><span><strong>HealthCenter</strong><small>Clinic System</small></span></a>
+      <nav class="admin-nav" aria-label="Admin navigation">
+        <a href="admin.html"><span></span>Dashboard</a>
+        <a href="patients.html"><span></span>Patients</a>
+        <a href="appointments.html"><span></span>Appointments</a>
+        <a class="active" href="doctors.html"><span></span>Doctors</a>
+        <a href="medical-records.html"><span></span>Medical Records</a>
+        <a href="user-management.html"><span></span>User Management</a>
+      </nav>
+      <div class="admin-profile-wrap">
+        <button class="admin-profile" type="button" data-profile-toggle aria-expanded="false"><span class="profile-badge">AD</span><span><strong>Admin</strong><small>Super User</small></span><span class="profile-chevron">⌄</span></button>
+        <a class="profile-logout" href="admin-login.html" data-admin-logout>Log out</a>
+      </div>
+    </aside>
+    <main class="admin-content">
+      <header class="admin-topbar"><div><h1>Doctors</h1><p>Sunday, September 6, 2026</p></div><div class="admin-tools"><div class="admin-search">⌕ <span>Search patients, records...</span></div><span class="notification"><i></i></span></div></header>
+      <section class="doctor-main">
+        <div class="doctor-toolbar"><span id="doctor-count">0 staff on duty</span><button class="button" id="add-doctor-toggle" type="button">+ Add Staff</button></div>
+        <section class="doctor-form-panel" id="doctor-form-panel"><div class="panel-heading"><h2>Add medical staff</h2></div><form class="doctor-form" id="doctor-form"><div class="form-row"><label>Staff name<input type="text" name="name" placeholder="Maria Santos" required></label><label>Role<select name="role" required><option value="">Select a role</option><option>Doctor</option><option>Nurse</option><option>Midwife</option></select></label></div><div class="form-row"><label>Email<input type="email" name="email" placeholder="staff@example.com" required></label><label>Contact number<input type="tel" name="contact" placeholder="09XX XXX XXXX" required></label></div><button type="submit">Add staff</button><p class="doctor-message" id="doctor-message" aria-live="polite"></p></form></section>
+        <section class="doctor-card-grid" id="doctors-body"><div class="empty-state">No doctors added yet.</div></section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

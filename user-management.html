@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management | Medical Health Center</title>
+    <link rel="stylesheet" href="user-management.css">
+    <script src="app.js" defer></script>
+</head>
+
+<body class="admin-body">
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <a class="admin-brand" href="admin.html"><img src="logo.jpg" alt="Medical Health Center logo"><span><strong>HealthCenter</strong><small>Clinic
+              System</small></span></a>
+            <nav class="admin-nav" aria-label="Admin navigation">
+                <a href="admin.html"><span></span>Dashboard</a><a href="patients.html"><span></span>Patients</a><a href="appointments.html"><span></span>Appointments</a><a href="doctors.html"><span></span>Doctors</a><a href="medical-records.html"><span></span>Medical Records</a>
+                <a
+                    class="active" href="user-management.html"><span></span>User Management
+                    </a>
+            </nav>
+            <div class="admin-profile-wrap"><button class="admin-profile" type="button" data-profile-toggle aria-expanded="false"><span
+              class="profile-badge">AD</span><span><strong>Admin</strong><small>Super
+                User</small></span><span
+              class="profile-chevron">⌄</span></button><a class="profile-logout" href="admin-login.html" data-admin-logout>Log out</a></div>
+        </aside>
+        <main class="admin-content">
+            <header class="admin-topbar">
+                <div>
+                    <h1>User Management</h1>
+                    <p>Sunday, September 6, 2026</p>
+                </div>
+                <div class="admin-tools">
+                    <div class="admin-search">⌕ <span>Search patients,
+                records...</span></div><span class="notification"><i></i></span></div>
+            </header>
+            <section class="users-main">
+                <div class="user-stats">
+                    <div class="user-stat"><span>Total
+                users</span><strong id="total-users">0</strong><small id="active-users">0 active</small></div>
+                    <div class="user-stat"><span>Doctors</span><strong id="doctor-users">0</strong><small>On-staff
+                physicians</small></div>
+                    <div class="user-stat"><span>Patients</span><strong id="patient-users">0</strong><small>Registered
+                customers</small></div>
+                </div>
+                <div class="users-toolbar"><label class="user-search">⌕ <input
+                id="user-search" type="search"
+                placeholder="Search users..."></label><select id="role-filter" aria-label="Filter users by role"><option
+                value="All">All</option><option
+                value="Doctor">Doctor</option><option
+                value="Nurse">Nurse</option><option
+                value="Midwife">Midwife</option><option
+                value="Patient">Patient</option></select><button class="button" type="button" id="add-user-toggle">+ Add User</button></div>
+                <section class="user-form-panel" id="user-form-panel">
+                    <form class="user-form" id="user-form">
+                        <div class="form-row"><label>Full
+                  name<input type="text" name="name" placeholder="Full name"
+                    required></label><label>Email<input type="email"
+                    name="email" placeholder="user@example.com"
+                    required></label></div>
+                        <div class="form-row"><label>Role<select name="role" required><option
+                      value>Select
+                      role</option><option>Doctor</option><option>Nurse</option><option>Midwife</option><option>Patient</option></select></label><label>Department<input
+                    type="text" name="department"
+                    placeholder="Administration, Cardiology..."></label></div><button type="submit">Add user</button>
+                        <p class="user-message" id="user-message" aria-live="polite"></p>
+                    </form>
+                </section>
+                <section class="user-panel">
+                    <div class="user-table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Role</th>
+                                    <th>Department</th>
+                                    <th>Joined</th>
+                                    <th>Last active
+                                    </th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-body">
+                                <tr>
+                                    <td colspan="7" class="empty-state">No user records yet.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+@import url("admin.css");
+.appointment-main {
+    padding: 30px;
+}
+
+.appointment-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.appointment-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-button {
+    min-height: 42px;
+    padding: 0 20px;
+    border: 1px solid #dbe5ed;
+    border-radius: 10px;
+    background: #fff;
+    color: #718398;
+}
+
+.filter-button:hover {
+    background: #e4f5f1;
+    color: var(--green);
+}
+
+.filter-button.active {
+    border-color: var(--green);
+    background: var(--green);
+    color: #fff;
+}
+
+.appointment-panel {
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid #e1e9ef;
+    border-radius: 15px;
+}
+
+.appointment-table-wrap {
+    overflow-x: auto;
+}
+
+.appointment-table-wrap table {
+    min-width: 900px;
+}
+
+.appointment-id {
+    color: #718398;
+    font-weight: 700;
+}
+
+.appointment-type {
+    color: #5e38b4;
+}
+
+.appointment-status {
+    display: inline-flex;
+    padding: 5px 11px;
+    border-radius: 99px;
+    font-size: .76rem;
+    font-weight: 800;
+}
+
+.appointment-status.pending {
+    background: #fff4dd;
+    color: #9c6815;
+}
+
+.appointment-status.confirmed {
+    background: #e3f3e9;
+    color: var(--green);
+}
+
+.appointment-status.completed {
+    background: #e3f3e9;
+    color: var(--green);
+}
+
+.appointment-status.cancelled {
+    background: #fde6e6;
+    color: var(--red);
+}
+
+.cancel-appointment {
+    padding: 0;
+    min-height: auto;
+    background: transparent;
+    color: var(--red);
+    font-size: .82rem;
+}
+
+.cancel-appointment:hover {
+    background: transparent;
+    color: #a51f22;
+    transform: none;
+}
+
+.empty-state {
+    padding: 42px 20px;
+    text-align: center;
+    color: var(--muted);
+}
+
+@media (max-width: 780px) {
+    .appointment-main {
+        padding: 20px 14px;
+    }
+    .appointment-filters {
+        overflow-x: auto;
+        width: 100%;
+    }
+    .filter-button {
+        white-space: nowrap;
+    }
+}

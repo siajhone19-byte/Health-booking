@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in | Medical Health Center</title>
+    <link rel="stylesheet" href="login.css">
+    <script src="app.js" defer></script>
+</head>
+
+<body class="auth-page">
+    <main class="auth-shell">
+        <aside class="auth-aside">
+            <a class="brand" href="index.html"><img src="logo.jpg" alt="Medical Health Center logo"><span class="brand-text"><strong>MEDICAL</strong><span>HEALTH CENTER</span></span>
+            </a>
+            <p>WelcomeKeep your appointments and health visits in one calm, convenient place.</p>
+        </aside>
+        <section class="form-panel">
+            <div class="eyebrow">Patient portal</div>
+            <h1>Welcome</h1>
+            <p>Log in to manage your appointments.</p>
+            <form class="form" id="login-form">
+                <label>Email address<input type="email" name="email" placeholder="you@example.com" required></label>
+                <label>Password<input type="password" name="password" placeholder="Enter your password" required></label>
+                <button type="submit">Log in</button>
+                <p class="form-message" id="auth-message" aria-live="polite"></p>
+
+                <div class="form-note">New to the clinic? <a href="signup.html">Create an account</a></div>
+            </form>
+        </section>
+    </main>
+</body>
+
+</html>

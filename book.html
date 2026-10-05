@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book an appointment | Medical Health Center</title>
+    <link rel="stylesheet" href="book.css">
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container navbar">
+            <a class="brand" href="index.html"><img src="logo.jpg" alt="Medical Health Center logo"><span class="brand-text"><strong>MEDICAL</strong><span>HEALTH
+              CENTER</span></span>
+            </a>
+            <nav class="nav-links"><a href="index.html">Home</a><a href="login.html" data-logout>Log
+            out</a></nav>
+        </div>
+    </header>
+    <main>
+        <section class="page-head">
+            <div class="container">
+                <div class="eyebrow">Patient portal</div>
+                <h1>Book your appointment.
+                </h1>
+                <p>Choose a convenient schedule and tell us a little about what brings you in.</p>
+            </div>
+        </section>
+        <section class="container booking-layout">
+            <section class="panel">
+                <h2>Appointment details</h2>
+                <p class="panel-subtitle">All fields are required unless marked optional.
+                </p>
+                <form class="booking-form">
+                    <div class="form-row"><label>Full name<input type="text"
+                  name="patient" placeholder="Juan Dela Cruz"
+                  required></label><label>Contact number<input type="tel"
+                  name="contact" placeholder="09XX XXX XXXX"
+                  required></label></div>
+                    <label>Email address<input type="email" name="email"
+                placeholder="you@example.com" required></label>
+                    <div class="form-row"><label>Service<select name="service"
+                  required><option value>Select a
+                    service</option><option>General
+                    consultation</option><option>Family health
+                    check</option><option>Preventive
+                    screening</option><option>Follow-up
+                    visit</option></select></label><label>Health
+                personnel<select name="doctor" id="doctor-choice"
+                  required><option value>Select health personnel</option><option
+                    value="Doctor">Doctor</option><option
+                    value="Nurse">Nurse</option><option
+                    value="Midwife">Midwife</option></select></label></div>
+                    <label>Preferred date<input type="date" name="date"
+                required></label>
+                    <label>Preferred time<select name="time" required><option
+                  value>Select a time</option><option>8:00 AM - 9:00
+                  AM</option><option>10:00 AM - 11:00 AM</option><option>1:00 PM
+                  - 2:00 PM</option><option>3:00 PM - 4:00
+                  PM</option></select></label>
+                    <label>Reason for visit <span>(optional)</span><textarea
+                name="reason"
+                placeholder="Tell us anything we should know before your visit."></textarea></label>
+                    <button type="submit">Submit appointment request</button>
+                    <p class="booking-message" id="booking-message" aria-live="polite"></p>
+                </form>
+            </section>
+            <aside class="panel">
+                <div class="eyebrow">Before you visit</div>
+                <h2>A little preparation helps.</h2>
+                <ul class="info-list">
+                    <li><b>01</b><span>Bring a valid ID and any
+                previous medical records.</span></li>
+                    <li><b>02</b><span>Please
+                arrive 10 minutes before your confirmed
+                schedule.</span></li>
+                    <li><b>03</b><span>Our staff will contact
+                you to confirm your appointment.</span></li>
+                </ul>
+            </aside>
+        </section>
+    </main>
+</body>
+
+</html>

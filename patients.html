@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patients | Medical Health Center</title>
+  <link rel="stylesheet" href="patients.css">
+  <script src="app.js" defer></script>
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="admin.html"><img src="logo.jpg" alt="Medical Health Center logo"><span><strong>HealthCenter</strong><small>Clinic System</small></span></a>
+      <nav class="admin-nav" aria-label="Admin navigation">
+        <a href="admin.html"><span></span>Dashboard</a>
+        <a class="active" href="patients.html"><span></span>Patients</a>
+        <a href="appointments.html"><span></span>Appointments</a>
+        <a href="doctors.html"><span></span>Doctors</a>
+        <a href="medical-records.html"><span></span>Medical Records</a>
+        <a href="user-management.html"><span></span>User Management</a>
+      </nav>
+      <div class="admin-profile-wrap">
+        <button class="admin-profile" type="button" data-profile-toggle aria-expanded="false"><span class="profile-badge">AD</span><span><strong>Admin</strong><small>Super User</small></span><span class="profile-chevron">⌄</span></button>
+        <a class="profile-logout" href="admin-login.html" data-admin-logout>Log out</a>
+      </div>
+    </aside>
+    <main class="admin-content">
+      <header class="admin-topbar"><div><h1>Patients</h1><p>Sunday, September 6, 2026</p></div><div class="admin-tools"><div class="admin-search">⌕ <span>Search patients, records...</span></div><span class="notification"><i></i></span></div></header>
+      <section class="patient-main">
+        <div class="patient-toolbar"><label class="patient-search">⌕ <input id="patient-search" type="search" placeholder="Search by name or email..."></label></div>
+        <section class="patient-panel"><div class="patient-table-wrap"><table><thead><tr><th>Patient ID</th><th>Name</th><th>Age</th><th>Blood type</th><th>Condition</th><th>Last visit</th><th>Status</th></tr></thead><tbody id="patients-body"><tr><td colspan="7" class="empty-state">No patient records yet.</td></tr></tbody></table></div></section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

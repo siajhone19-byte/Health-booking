@@ -1,0 +1,84 @@
+@import url("admin.css");
+.patient-main {
+    padding: 30px;
+}
+
+.patient-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.patient-search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 315px;
+    padding: 0 14px;
+    border: 1px solid #dbe5ed;
+    border-radius: 10px;
+    background: #fff;
+    color: #9aabbc;
+    font-weight: 400;
+}
+
+.patient-search input {
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    outline: 0;
+}
+
+.patient-search input:focus {
+    box-shadow: none;
+}
+
+.patient-panel {
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid #e1e9ef;
+    border-radius: 15px;
+}
+
+.patient-table-wrap {
+    overflow-x: auto;
+}
+
+.patient-table-wrap table {
+    min-width: 760px;
+}
+
+.patient-id {
+    color: #718398;
+    font-weight: 700;
+}
+
+.patient-name strong,
+.patient-name small {
+    display: block;
+}
+
+.patient-name small {
+    color: var(--muted);
+}
+
+.patient-status {
+    display: inline-flex;
+    padding: 5px 11px;
+    border-radius: 99px;
+    background: #e3f3e9;
+    color: var(--green);
+    font-size: .76rem;
+    font-weight: 800;
+}
+
+@media (max-width: 780px) {
+    .patient-main {
+        padding: 20px 14px;
+    }
+    .patient-search {
+        width: 100%;
+    }
+}

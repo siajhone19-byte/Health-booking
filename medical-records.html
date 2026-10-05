@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Records | Medical Health Center</title>
+  <link rel="stylesheet" href="medical-records.css">
+  <script src="app.js" defer></script>
+</head>
+<body class="admin-body">
+  <div class="admin-layout">
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="admin.html"><img src="logo.jpg" alt="Medical Health Center logo"><span><strong>HealthCenter</strong><small>Clinic System</small></span></a>
+      <nav class="admin-nav" aria-label="Admin navigation">
+        <a href="admin.html"><span></span>Dashboard</a><a href="patients.html"><span></span>Patients</a><a href="appointments.html"><span></span>Appointments</a><a href="doctors.html"><span></span>Doctors</a><a class="active" href="medical-records.html"><span></span>Medical Records</a><a href="user-management.html"><span></span>User Management</a>
+      </nav>
+      <div class="admin-profile-wrap"><button class="admin-profile" type="button" data-profile-toggle aria-expanded="false"><span class="profile-badge">AD</span><span><strong>Admin</strong><small>Super User</small></span><span class="profile-chevron">⌄</span></button><a class="profile-logout" href="admin-login.html" data-admin-logout>Log out</a></div>
+    </aside>
+    <main class="admin-content">
+      <header class="admin-topbar"><div><h1>Medical Records</h1><p>Sunday, September 6, 2026</p></div><div class="admin-tools"><div class="admin-search">⌕ <span>Search patients, records...</span></div><span class="notification"><i></i></span></div></header>
+      <section class="records-main">
+        <div class="records-toolbar"><span id="records-count">0 records found</span><button class="button" type="button" id="new-record-toggle">+ New Record</button></div>
+        <section class="record-form-panel" id="record-form-panel"><form class="record-form" id="record-form"><div class="form-row"><label>Patient name<input type="text" name="patient" placeholder="Patient name" required></label><label>Record type<select name="type" required><option value="">Select type</option><option>Lab Results</option><option>Consultation</option><option>Follow-up</option></select></label></div><div class="form-row"><label>Doctor<input type="text" name="doctor" placeholder="Doctor name" required></label><label>Date<input type="date" name="date" required></label></div><div class="form-row"><label>Diagnosis<textarea name="diagnosis" placeholder="Diagnosis" required></textarea></label><label>Prescription<textarea name="prescription" placeholder="Prescription or treatment" required></textarea></label></div><button type="submit">Save record</button><p class="record-message" id="record-message" aria-live="polite"></p></form></section>
+        <section class="record-list" id="records-body"><div class="empty-state">No medical records yet.</div></section>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
