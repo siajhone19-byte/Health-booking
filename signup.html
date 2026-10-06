@@ -1,62 +1,126 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign up | Medical Health Center</title>
+    <link rel="stylesheet" href="signup.css" />
+    <script src="app.js" defer></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign up | Medical Health Center</title>
-  <link rel="stylesheet" href="signup.css">
-  <script src="app.js" defer></script>
-</head>
+  <body class="auth-page">
+    <main class="auth-shell">
+      <aside class="auth-aside">
+        <a class="brand" href="index.html"
+          ><img src="logo.jpg" alt="Medical Health Center logo" /><span
+            class="brand-text"
+            ><strong>MEDICAL</strong><span>HEALTH CENTER</span></span
+          ></a
+        >
+        <p>
+          Create your patient account and make booking your next clinic visit
+          easier.
+        </p>
+      </aside>
+      <section class="form-panel">
+        <div class="eyebrow">Patient registration</div>
+        <h1>Join our clinic.</h1>
+        <p>Fill in your details to get started.</p>
+        <form class="form" id="signup-form">
+          <div class="form-row">
+            <label
+              >First name<input
+                type="text"
+                name="first-name"
+                placeholder="First name"
+                required
+            /></label>
+            <label
+              >Last name<input
+                type="text"
+                name="last-name"
+                placeholder="Last name"
+                required
+            /></label>
+            <label
+              >Middle name<input
+                type="text"
+                name="middle-name"
+                placeholder="N/A if nothing"
+                required
+            /></label>
+          </div>
+          <label
+            >Email address<input
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              required
+          /></label>
+          <label
+            >Mobile number<input
+              type="tel"
+              name="phone"
+              placeholder="09XX XXX XXXX"
+              maxlength="11"
+              required
+          /></label>
+          <div class="form-row">
+            <label
+              >Age<input
+                type="number"
+                name="age"
+                min="1"
+                max="120"
+                placeholder="35"
+                required
+            /></label>
+            <label
+              >Blood type<select name="blood-type" required>
+                <option value="">Select blood type</option>
+                <option>N/A</option>
+                <option>A+</option>
+                <option>A-</option>
+                <option>B+</option>
+                <option>B-</option>
+                <option>AB+</option>
+                <option>AB-</option>
+                <option>O+</option>
+                <option>O-</option>
+              </select></label
+            >
+          </div>
 
-<body class="auth-page">
-  <main class="auth-shell">
-    <aside class="auth-aside">
-      <a class="brand" href="index.html"><img src="logo.jpg" alt="Medical Health Center logo"><span
-          class="brand-text"><strong>MEDICAL</strong><span>HEALTH CENTER</span></span></a>
-      <p>Create your patient account and make booking your next clinic visit easier.</p>
-    </aside>
-    <section class="form-panel">
-      <div class="eyebrow">Patient registration</div>
-      <h1>Join our clinic.</h1>
-      <p>Fill in your details to get started.</p>
-      <form class="form" id="signup-form">
-        <div class="form-row">
-          <label>First name<input type="text" name="first-name" placeholder="Jhone" required></label>
-          <label>Last name<input type="text" name="last-name" placeholder="Sia" required></label>
-          <label>Middle name<input type="text" name="last-name" placeholder="N/A if nothing" required></label>
-        </div>
-        <label>Email address<input type="email" name="email" placeholder="you@example.com" required></label>
-        <label>Mobile number<input type="tel" name="phone" placeholder="09XX XXX XXXX" maxlength="11" required></label>
-        <div class="form-row">
-          <label>Age<input type="number" name="age" min="1" max="120" placeholder="35" required></label>
-          <label>Blood type<select name="blood-type" required>
-              <option value="">Select blood type</option>
-              <option>N/A</option>
-              <option>A+</option>
-              <option>A-</option>
-              <option>B+</option>
-              <option>B-</option>
-              <option>AB+</option>
-              <option>AB-</option>
-              <option>O+</option>
-              <option>O-</option>
-            </select></label>
-        </div>
-        
-        <label>Password<input type="password" name="password" placeholder="Create a password" minlength="8"
-            required></label>
-        <label>Confirm Password<input type="password" name="confirm-password" placeholder="Confirm password" minlength="8"
-            required></label>
-          
+          <label
+            >Password>
+            <input
+              type="password"
+              name="password"
+              placeholder="Create a password"
+              minlength="8"
+              required
+            />
+          </label>
 
-            <button type="submit">Sign up</button>
+          <label
+            >Confirm Password>
+            <input
+              type="password"
+              name="confirm-password"
+              placeholder="Confirm password"
+              minlength="8"
+              required
+            />
+          </label>
 
-        <p class="form-message" id="auth-message" aria-live="polite"></p>
-        <div class="form-note">Already registered? <a href="login.html">Log in</a></div>
-      </form>
-    </section>
-  </main>
-</body>
+          <button type="submit">Sign up</button>
 
+          <p class="form-message" id="auth-message" aria-live="polite"></p>
+          <div class="form-note">
+            Already registered? <a href="login.html">Log in</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </body>
 </html>

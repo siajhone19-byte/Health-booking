@@ -200,65 +200,7 @@ function setupLoginForm() {
     });
 }
 
-function setupSignupForm() {
-    const signupForm = document.querySelector("#signup-form");
-
-    if (!signupForm) return;
-
-    signupForm.addEventListener("submit", function(event) {
-        event.preventDefault();
-
-        const formData = new FormData(signupForm);
-
-        const password = String(formData.get("password"));
-        const confirmPassword = String(formData.get("confirm-password"));
-
-        if (password !== confirmPassword) {
-            showMessage("Passwords do not match.");
-            return;
-        }
-
-        const account = {
-            firstName: String(formData.get("first-name")).trim(),
-            lastName: String(formData.get("last-name")).trim(),
-            email: String(formData.get("email")).trim().toLowerCase(),
-            phone: String(formData.get("phone")).trim(),
-            age: String(formData.get("age")).trim(),
-            bloodType: String(formData.get("blood-type")).trim(),
-            condition: "N/A",
-            password: password,
-            role: "Patient"
-        };
-
-        localStorage.setItem(
-            ACCOUNT_KEY,
-            JSON.stringify(account)
-        );
-
-        const users = getUsers();
-
-        if (!users.some(user => user.email === account.email)) {
-            users.push({
-                name: `${account.firstName} ${account.lastName}`,
-                email: account.email,
-                role: "Patient",
-                department: "Patient Services",
-                joined: new Date().toLocaleDateString(),
-                lastActive: "Now",
-                status: "Active"
-            });
-
-            localStorage.setItem(
-                USERS_KEY,
-                JSON.stringify(users)
-            );
-        }
-
-        clearAllSessions();
-
-        window.location.href = "login.html";
-    });
-}
+function setupSignupForm() { const signupForm = document.querySelector("#signup-form"); if (!signupForm) return; signupForm.addEventListener("submit", function(event) { event.preventDefault(); const formData = new FormData(signupForm); const email = String( formData.get("email") || "" ).trim().toLowerCase(); const password = String( formData.get("password") || "" ); const confirmPassword = String( formData.get("confirm-password") || "" ); if (password !== confirmPassword) { showMessage("Passwords do not match."); return; } const existingUsers = getUsers(); if ( existingUsers.some(function(user) { return String(user.email || "").toLowerCase() === email; }) ) { showMessage("An account with this email already exists."); return; } const account = { id: "PAT-" + Date.now(), firstName: String( formData.get("first-name") || "" ).trim(), lastName: String( formData.get("last-name") || "" ).trim(), middleName: String( formData.get("middle-name") || "" ).trim(), email: email, phone: String( formData.get("phone") || "" ).trim(), age: String( formData.get("age") || "" ).trim(), bloodType: String( formData.get("blood-type") || "" ).trim(), condition: "N/A", password: password, role: "Patient" }; localStorage.setItem( ACCOUNT_KEY, JSON.stringify(account) ); existingUsers.push({ id: account.id, name: account.firstName + " " + account.middleName + " " + account.lastName, email: account.email, phone: account.phone, age: account.age, bloodType: account.bloodType, role: "Patient", department: "Patient Services", joined: new Date().toLocaleDateString(), lastActive: "Now", status: "Active", password: account.password }); saveUsers(existingUsers); clearAllSessions(); alert("Account created successfully! Please log in."); window.location.href = "login.html"; }); }
 function setupBookingForm() {
     const bookingForm =
         document.querySelector(".booking-form");
