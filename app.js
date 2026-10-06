@@ -1,4 +1,3 @@
-```javascript
 const ACCOUNT_KEY = "mhc_account";
 const SESSION_KEY = "mhc_session";
 const ADMIN_SESSION_KEY = "mhc_admin_session";
@@ -211,43 +210,21 @@ function setupSignupForm() {
 
         const formData = new FormData(signupForm);
 
-        const email = String(
-            formData.get("email") || ""
-        ).trim().toLowerCase();
+        const password = String(formData.get("password"));
+        const confirmPassword = String(formData.get("confirm-password"));
 
-        const password = String(
-            formData.get("password") || ""
-        );
-
-        const existingUsers = getUsers();
-
-        if (
-            existingUsers.some(function(user) {
-                return String(user.email || "").toLowerCase() === email;
-            })
-        ) {
-            alert("An account with this email already exists.");
+        if (password !== confirmPassword) {
+            showMessage("Passwords do not match.");
             return;
         }
 
         const account = {
-            id: "PAT-" + Date.now(),
-            firstName: String(
-                formData.get("first-name") || ""
-            ).trim(),
-            lastName: String(
-                formData.get("last-name") || ""
-            ).trim(),
-            email: email,
-            phone: String(
-                formData.get("phone") || ""
-            ).trim(),
-            age: String(
-                formData.get("age") || ""
-            ).trim(),
-            bloodType: String(
-                formData.get("blood-type") || ""
-            ).trim(),
+            firstName: String(formData.get("first-name")).trim(),
+            lastName: String(formData.get("last-name")).trim(),
+            email: String(formData.get("email")).trim().toLowerCase(),
+            phone: String(formData.get("phone")).trim(),
+            age: String(formData.get("age")).trim(),
+            bloodType: String(formData.get("blood-type")).trim(),
             condition: "N/A",
             password: password,
             role: "Patient"
@@ -258,32 +235,30 @@ function setupSignupForm() {
             JSON.stringify(account)
         );
 
-        existingUsers.push({
-            id: account.id,
-            name:
-                account.firstName +
-                " " +
-                account.lastName,
-            email: account.email,
-            phone: account.phone,
-            age: account.age,
-            bloodType: account.bloodType,
-            role: "Patient",
-            department: "Patient Services",
-            joined: new Date().toLocaleDateString(),
-            lastActive: "Now",
-            status: "Active",
-            password: account.password
-        });
+        const users = getUsers();
 
-        saveUsers(existingUsers);
+        if (!users.some(user => user.email === account.email)) {
+            users.push({
+                name: `${account.firstName} ${account.lastName}`,
+                email: account.email,
+                role: "Patient",
+                department: "Patient Services",
+                joined: new Date().toLocaleDateString(),
+                lastActive: "Now",
+                status: "Active"
+            });
+
+            localStorage.setItem(
+                USERS_KEY,
+                JSON.stringify(users)
+            );
+        }
 
         clearAllSessions();
 
         window.location.href = "login.html";
     });
 }
-
 function setupBookingForm() {
     const bookingForm =
         document.querySelector(".booking-form");
@@ -800,7 +775,7 @@ function renderAdminDashboard() {
     body.innerHTML =
         todayAppointments
             .map(function(appointment) {
-                return `
+                return 
                     <tr>
                         <td>${escapeHTML(appointment.patient)}</td>
                         <td>${escapeHTML(appointment.service)}</td>
@@ -811,7 +786,7 @@ function renderAdminDashboard() {
                         <td>${escapeHTML(appointment.contact)}</td>
                         <td>${escapeHTML(appointment.status)}</td>
                     </tr>
-                `;
+                ;
             })
             .join("");
 }
@@ -839,7 +814,7 @@ function renderAllAppointments() {
             .slice()
             .reverse()
             .map(function(appointment) {
-                return `
+                return 
                     <tr>
                         <td>${escapeHTML(appointment.id)}</td>
                         <td>
@@ -869,7 +844,7 @@ function renderAllAppointments() {
                             ${getAdminAppointmentActions(appointment)}
                         </td>
                     </tr>
-                `;
+                ;
             })
             .join("");
 
@@ -901,7 +876,7 @@ function getAdminAppointmentActions(
         return "Cancelled";
     }
 
-    return `
+    return`
         <button type="button"
             data-appointment-action="Confirmed"
             data-id="${escapeHTML(appointment.id)}">
@@ -1140,6 +1115,7 @@ function getDoctorAppointmentActions(
             data-id="${escapeHTML(appointment.id)}">
             Cancel
         </button>
+
     `;
 }
 
@@ -1174,7 +1150,7 @@ function renderDoctorsPage() {
 
     container.innerHTML =
         doctors.map(function(doctor) {
-            return `
+            return
                 <div class="doctor-card">
                     <h3>${escapeHTML(doctor.name)}</h3>
                     <p><strong>Role:</strong> ${escapeHTML(doctor.role || "Doctor")}</p>
@@ -1183,7 +1159,7 @@ function renderDoctorsPage() {
                     <p><strong>Contact:</strong> ${escapeHTML(doctor.contact || "-")}</p>
                     <p><strong>Password:</strong> ${escapeHTML(doctor.password || DEFAULT_DOCTOR_PASSWORD)}</p>
                 </div>
-            `;
+            ;
         }).join("");
 }
 
@@ -1329,13 +1305,13 @@ function renderAdminCredentials() {
     box.id =
         "admin-credentials-box";
 
-    box.innerHTML = `
+    box.innerHTML =
         <div>
             <strong>Administrator Account</strong>
             <p>Email: <span>${escapeHTML(ADMIN_EMAIL)}</span></p>
             <p>Password: <span>${escapeHTML(ADMIN_PASSWORD)}</span></p>
         </div>
-    `;
+    
 
     const target =
         document.querySelector(
@@ -1501,4 +1477,4 @@ document.addEventListener(
         renderPatientInfo();
     }
 );
-```
+
