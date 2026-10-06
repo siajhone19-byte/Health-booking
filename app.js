@@ -108,7 +108,7 @@ function clearAllSessions() {
 function initializeDefaultDoctor() {
     const doctors = getDoctors();
 
-    const existingDoctor = doctors.find(function(doctor) {
+    const existingDoctor = doctors.find(function (doctor) {
         return doctor.email === DEFAULT_DOCTOR_EMAIL;
     });
 
@@ -143,7 +143,7 @@ function setupLoginForm() {
 
     if (!loginForm) return;
 
-    loginForm.addEventListener("submit", function(event) {
+    loginForm.addEventListener("submit", function (event) {
         event.preventDefault();
 
         const formData = new FormData(loginForm);
@@ -169,7 +169,7 @@ function setupLoginForm() {
 
         const doctors = getDoctors();
 
-        const doctor = doctors.find(function(record) {
+        const doctor = doctors.find(function (record) {
             return (
                 String(record.email || "").toLowerCase() === email &&
                 String(
@@ -200,7 +200,7 @@ function setupLoginForm() {
     });
 }
 
-function setupSignupForm() { const signupForm = document.querySelector("#signup-form"); if (!signupForm) return; signupForm.addEventListener("submit", function(event) { event.preventDefault(); const formData = new FormData(signupForm); const email = String( formData.get("email") || "" ).trim().toLowerCase(); const password = String( formData.get("password") || "" ); const confirmPassword = String( formData.get("confirm-password") || "" ); if (password !== confirmPassword) { showMessage("Passwords do not match."); return; } const existingUsers = getUsers(); if ( existingUsers.some(function(user) { return String(user.email || "").toLowerCase() === email; }) ) { showMessage("An account with this email already exists."); return; } const account = { id: "PAT-" + Date.now(), firstName: String( formData.get("first-name") || "" ).trim(), lastName: String( formData.get("last-name") || "" ).trim(), middleName: String( formData.get("middle-name") || "" ).trim(), email: email, phone: String( formData.get("phone") || "" ).trim(), age: String( formData.get("age") || "" ).trim(), bloodType: String( formData.get("blood-type") || "" ).trim(), condition: "N/A", password: password, role: "Patient" }; localStorage.setItem( ACCOUNT_KEY, JSON.stringify(account) ); existingUsers.push({ id: account.id, name: account.firstName + " " + account.middleName + " " + account.lastName, email: account.email, phone: account.phone, age: account.age, bloodType: account.bloodType, role: "Patient", department: "Patient Services", joined: new Date().toLocaleDateString(), lastActive: "Now", status: "Active", password: account.password }); saveUsers(existingUsers); clearAllSessions(); alert("Account created successfully! Please log in."); window.location.href = "login.html"; }); }
+function setupSignupForm() { const signupForm = document.querySelector("#signup-form"); if (!signupForm) return; signupForm.addEventListener("submit", function (event) { event.preventDefault(); const formData = new FormData(signupForm); const email = String(formData.get("email") || "").trim().toLowerCase(); const password = String(formData.get("password") || ""); const confirmPassword = String(formData.get("confirm-password") || ""); if (password !== confirmPassword) { showMessage("Passwords do not match."); return; } const existingUsers = getUsers(); if (existingUsers.some(function (user) { return String(user.email || "").toLowerCase() === email; })) { showMessage("An account with this email already exists."); return; } const account = { id: "PAT-" + Date.now(), firstName: String(formData.get("first-name") || "").trim(), lastName: String(formData.get("last-name") || "").trim(), middleName: String(formData.get("middle-name") || "").trim(), email: email, phone: String(formData.get("phone") || "").trim(), age: String(formData.get("age") || "").trim(), bloodType: String(formData.get("blood-type") || "").trim(), condition: "N/A", password: password, role: "Patient" }; localStorage.setItem(ACCOUNT_KEY, JSON.stringify(account)); existingUsers.push({ id: account.id, name: account.firstName + " " + account.middleName + " " + account.lastName, email: account.email, phone: account.phone, age: account.age, bloodType: account.bloodType, role: "Patient", department: "Patient Services", joined: new Date().toLocaleDateString(), lastActive: "Now", status: "Active", password: account.password }); saveUsers(existingUsers); clearAllSessions(); alert("Account created successfully! Please log in."); window.location.href = "#login.html"; }); }
 function setupBookingForm() {
     const bookingForm =
         document.querySelector(".booking-form");
@@ -261,7 +261,7 @@ function setupBookingForm() {
             year + "-" + month + "-" + day;
     }
 
-    bookingForm.addEventListener("submit", function(event) {
+    bookingForm.addEventListener("submit", function (event) {
         event.preventDefault();
 
         const formData =
@@ -328,14 +328,14 @@ function setupBookingForm() {
             getAppointments();
 
         const duplicate =
-            appointments.some(function(appointment) {
+            appointments.some(function (appointment) {
                 return (
                     appointment.doctorEmail ===
-                        doctorEmail &&
+                    doctorEmail &&
                     appointment.date === date &&
                     appointment.time === time &&
                     appointment.status !==
-                        "Cancelled"
+                    "Cancelled"
                 );
             });
 
@@ -460,7 +460,7 @@ function setupDoctorChoices() {
     select.innerHTML =
         '<option value="">Select health personnel</option>';
 
-    doctors.forEach(function(doctor) {
+    doctors.forEach(function (doctor) {
         const option =
             document.createElement("option");
 
@@ -485,10 +485,10 @@ function setupDoctorChoices() {
 
     select.addEventListener(
         "change",
-        function() {
+        function () {
             const selected =
                 select.options[
-                    select.selectedIndex
+                select.selectedIndex
                 ];
 
             const form =
@@ -636,7 +636,7 @@ function renderAdminDashboard() {
         year + "-" + month + "-" + day;
 
     const todayAppointments =
-        appointments.filter(function(appointment) {
+        appointments.filter(function (appointment) {
             return (
                 appointment.date ===
                 todayString
@@ -644,19 +644,19 @@ function renderAdminDashboard() {
         });
 
     const completed =
-        appointments.filter(function(appointment) {
+        appointments.filter(function (appointment) {
             return appointment.status ===
                 "Completed";
         });
 
     const pending =
-        appointments.filter(function(appointment) {
+        appointments.filter(function (appointment) {
             return appointment.status ===
                 "Pending";
         });
 
     const scheduled =
-        appointments.filter(function(appointment) {
+        appointments.filter(function (appointment) {
             return appointment.status !==
                 "Cancelled";
         });
@@ -716,19 +716,19 @@ function renderAdminDashboard() {
 
     body.innerHTML =
         todayAppointments
-            .map(function(appointment) {
-                return 
-                    <tr>
-                        <td>${escapeHTML(appointment.patient)}</td>
-                        <td>${escapeHTML(appointment.service)}</td>
-                        <td>${escapeHTML(appointment.doctor)}</td>
-                        <td>${escapeHTML(appointment.diagnosis || "-")}</td>
-                        <td>${escapeHTML(appointment.prescription || "-")}</td>
-                        <td>${escapeHTML(formatDate(appointment.date))}<br>${escapeHTML(appointment.time)}</td>
-                        <td>${escapeHTML(appointment.contact)}</td>
-                        <td>${escapeHTML(appointment.status)}</td>
-                    </tr>
-                ;
+            .map(function (appointment) {
+                return
+                <tr>
+                    <td>${escapeHTML(appointment.patient)}</td>
+                    <td>${escapeHTML(appointment.service)}</td>
+                    <td>${escapeHTML(appointment.doctor)}</td>
+                    <td>${escapeHTML(appointment.diagnosis || "-")}</td>
+                    <td>${escapeHTML(appointment.prescription || "-")}</td>
+                    <td>${escapeHTML(formatDate(appointment.date))}<br>${escapeHTML(appointment.time)}</td>
+                    <td>${escapeHTML(appointment.contact)}</td>
+                    <td>${escapeHTML(appointment.status)}</td>
+                </tr>
+                    ;
             })
             .join("");
 }
@@ -755,38 +755,38 @@ function renderAllAppointments() {
         appointments
             .slice()
             .reverse()
-            .map(function(appointment) {
-                return 
-                    <tr>
-                        <td>${escapeHTML(appointment.id)}</td>
-                        <td>
-                            <strong>${escapeHTML(appointment.patient)}</strong>
-                            <br>
+            .map(function (appointment) {
+                return
+                <tr>
+                    <td>${escapeHTML(appointment.id)}</td>
+                    <td>
+                        <strong>${escapeHTML(appointment.patient)}</strong>
+                        <br>
                             <small>${escapeHTML(appointment.email)}</small>
-                        </td>
-                        <td>
-                            ${escapeHTML(appointment.doctor)}
-                            <br>
+                    </td>
+                    <td>
+                        ${escapeHTML(appointment.doctor)}
+                        <br>
                             <small>${escapeHTML(appointment.contact)}</small>
-                        </td>
-                        <td>${escapeHTML(appointment.diagnosis || "-")}</td>
-                        <td>${escapeHTML(appointment.prescription || "-")}</td>
-                        <td>
-                            ${escapeHTML(formatDate(appointment.date))}
-                            <br>
+                    </td>
+                    <td>${escapeHTML(appointment.diagnosis || "-")}</td>
+                    <td>${escapeHTML(appointment.prescription || "-")}</td>
+                    <td>
+                        ${escapeHTML(formatDate(appointment.date))}
+                        <br>
                             ${escapeHTML(appointment.time)}
-                        </td>
-                        <td>${escapeHTML(appointment.service)}</td>
-                        <td>
-                            <span class="status-${statusClass(appointment.status)}">
-                                ${escapeHTML(appointment.status)}
-                            </span>
-                        </td>
-                        <td>
-                            ${getAdminAppointmentActions(appointment)}
-                        </td>
-                    </tr>
-                ;
+                    </td>
+                    <td>${escapeHTML(appointment.service)}</td>
+                    <td>
+                        <span class="status-${statusClass(appointment.status)}">
+                            ${escapeHTML(appointment.status)}
+                        </span>
+                    </td>
+                    <td>
+                        ${getAdminAppointmentActions(appointment)}
+                    </td>
+                </tr>
+                    ;
             })
             .join("");
 
@@ -794,10 +794,10 @@ function renderAllAppointments() {
         .querySelectorAll(
             "[data-appointment-action]"
         )
-        .forEach(function(button) {
+        .forEach(function (button) {
             button.addEventListener(
                 "click",
-                function() {
+                function () {
                     updateAppointmentStatus(
                         button.dataset.id,
                         button.dataset.appointmentAction
@@ -818,7 +818,7 @@ function getAdminAppointmentActions(
         return "Cancelled";
     }
 
-    return`
+    return `
         <button type="button"
             data-appointment-action="Confirmed"
             data-id="${escapeHTML(appointment.id)}">
@@ -841,7 +841,7 @@ function updateAppointmentStatus(
         getAppointments();
 
     const appointment =
-        appointments.find(function(record) {
+        appointments.find(function (record) {
             return record.id === id;
         });
 
@@ -874,7 +874,7 @@ function renderDoctorDashboard() {
         getAppointments();
 
     const doctorAppointments =
-        appointments.filter(function(appointment) {
+        appointments.filter(function (appointment) {
             return (
                 String(
                     appointment.doctorEmail || ""
@@ -906,7 +906,7 @@ function renderDoctorDashboard() {
 
     const todayCount =
         doctorAppointments.filter(
-            function(appointment) {
+            function (appointment) {
                 return (
                     appointment.date ===
                     todayString &&
@@ -918,7 +918,7 @@ function renderDoctorDashboard() {
 
     const completedCount =
         doctorAppointments.filter(
-            function(appointment) {
+            function (appointment) {
                 return (
                     appointment.status ===
                     "Completed"
@@ -928,7 +928,7 @@ function renderDoctorDashboard() {
 
     const cancelledCount =
         doctorAppointments.filter(
-            function(appointment) {
+            function (appointment) {
                 return (
                     appointment.status ===
                     "Cancelled"
@@ -993,7 +993,7 @@ function renderDoctorDashboard() {
         doctorAppointments
             .slice()
             .reverse()
-            .map(function(appointment) {
+            .map(function (appointment) {
                 return `
                     <tr>
                         <td>${escapeHTML(appointment.patient)}</td>
@@ -1021,10 +1021,10 @@ function renderDoctorDashboard() {
         .querySelectorAll(
             "[data-doctor-action]"
         )
-        .forEach(function(button) {
+        .forEach(function (button) {
             button.addEventListener(
                 "click",
-                function() {
+                function () {
                     updateAppointmentStatus(
                         button.dataset.id,
                         button.dataset.doctorAction
@@ -1091,17 +1091,17 @@ function renderDoctorsPage() {
     }
 
     container.innerHTML =
-        doctors.map(function(doctor) {
+        doctors.map(function (doctor) {
             return
-                <div class="doctor-card">
-                    <h3>${escapeHTML(doctor.name)}</h3>
-                    <p><strong>Role:</strong> ${escapeHTML(doctor.role || "Doctor")}</p>
-                    <p><strong>Specialty:</strong> ${escapeHTML(doctor.specialty || "General Medicine")}</p>
-                    <p><strong>Email:</strong> ${escapeHTML(doctor.email)}</p>
-                    <p><strong>Contact:</strong> ${escapeHTML(doctor.contact || "-")}</p>
-                    <p><strong>Password:</strong> ${escapeHTML(doctor.password || DEFAULT_DOCTOR_PASSWORD)}</p>
-                </div>
-            ;
+            <div class="doctor-card">
+                <h3>${escapeHTML(doctor.name)}</h3>
+                <p><strong>Role:</strong> ${escapeHTML(doctor.role || "Doctor")}</p>
+                <p><strong>Specialty:</strong> ${escapeHTML(doctor.specialty || "General Medicine")}</p>
+                <p><strong>Email:</strong> ${escapeHTML(doctor.email)}</p>
+                <p><strong>Contact:</strong> ${escapeHTML(doctor.contact || "-")}</p>
+                <p><strong>Password:</strong> ${escapeHTML(doctor.password || DEFAULT_DOCTOR_PASSWORD)}</p>
+            </div>
+                ;
         }).join("");
 }
 
@@ -1115,7 +1115,7 @@ function setupDoctorForm() {
 
     form.addEventListener(
         "submit",
-        function(event) {
+        function (event) {
             event.preventDefault();
 
             const formData =
@@ -1145,7 +1145,7 @@ function setupDoctorForm() {
                 getDoctors();
 
             if (
-                doctors.some(function(doctor) {
+                doctors.some(function (doctor) {
                     return (
                         String(
                             doctor.email || ""
@@ -1253,7 +1253,7 @@ function renderAdminCredentials() {
             <p>Email: <span>${escapeHTML(ADMIN_EMAIL)}</span></p>
             <p>Password: <span>${escapeHTML(ADMIN_PASSWORD)}</span></p>
         </div>
-    
+
 
     const target =
         document.querySelector(
@@ -1278,7 +1278,7 @@ function renderPatientInfo() {
         .querySelectorAll(
             "[data-patient-name]"
         )
-        .forEach(function(element) {
+        .forEach(function (element) {
             element.textContent =
                 (
                     account.firstName +
@@ -1291,7 +1291,7 @@ function renderPatientInfo() {
         .querySelectorAll(
             "[data-patient-email]"
         )
-        .forEach(function(element) {
+        .forEach(function (element) {
             element.textContent =
                 account.email || "";
         });
@@ -1306,10 +1306,10 @@ function renderAllAppointmentPages() {
 function setupLogout() {
     document
         .querySelectorAll("[data-logout]")
-        .forEach(function(logoutLink) {
+        .forEach(function (logoutLink) {
             logoutLink.addEventListener(
                 "click",
-                function(event) {
+                function (event) {
                     event.preventDefault();
 
                     setSession(false);
@@ -1324,10 +1324,10 @@ function setupLogout() {
         .querySelectorAll(
             "[data-admin-logout]"
         )
-        .forEach(function(logoutLink) {
+        .forEach(function (logoutLink) {
             logoutLink.addEventListener(
                 "click",
-                function(event) {
+                function (event) {
                     event.preventDefault();
 
                     setAdminSession(false);
@@ -1342,10 +1342,10 @@ function setupLogout() {
         .querySelectorAll(
             "[data-doctor-logout]"
         )
-        .forEach(function(logoutLink) {
+        .forEach(function (logoutLink) {
             logoutLink.addEventListener(
                 "click",
-                function(event) {
+                function (event) {
                     event.preventDefault();
 
                     setDoctorSession(
@@ -1398,7 +1398,7 @@ function protectPatientPage() {
 
 document.addEventListener(
     "DOMContentLoaded",
-    function() {
+    function () {
         initializeDefaultDoctor();
 
         setupLoginForm();
