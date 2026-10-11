@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin log in | Medical Health Center</title>
+  <link rel="stylesheet" href="admin-login.css">
+  <script src="app.js" defer></script>
+</head>
+<body class="auth-page">
+  <main class="auth-shell">
+    <aside class="auth-aside">
+      <a class="brand" href="index.html"><img src="logo.jpg" alt="Medical Health Center logo"><span class="brand-text"><strong>MEDICAL</strong><span>HEALTH CENTER</span></span></a>
+      <p>Clinic staff access for reviewing patient appointment requests.</p>
+      <div class="mini-note">Restricted to authorized clinic staff.</div>
+    </aside>
+    <section class="form-panel">
+      <div class="eyebrow">Staff portal</div>
+      <h1>Admin log in.</h1>
+      <p>Sign in separately from the patient portal.</p>
+      <form class="form" id="admin-login-form">
+        <label>Admin email<input type="email" name="email" placeholder="admin@medicalcenter.com" required></label>
+        <label>Password<input type="password" name="password" placeholder="Enter your password" required></label>
+        <button type="submit">Log in as admin</button>
+        <p class="form-message" id="auth-message" aria-live="polite"></p>
+        <div class="form-note"><a href="index.html">Back to customer site</a></div>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
