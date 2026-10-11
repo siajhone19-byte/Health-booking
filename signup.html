@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign up | Medical Health Center</title>
   <link rel="stylesheet" href="signup.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="app.js" defer></script>
 </head>
+
 <body class="auth-page">
   <main class="auth-shell">
     <aside class="auth-aside">
-      <a class="brand" href="index.html"><img src="logo.jpg" alt="Medical Health Center logo"><span class="brand-text"><strong>MEDICAL</strong><span>HEALTH CENTER</span></span></a>
+      <a class="brand" href="index.html"><img src="logo.jpg" alt="Medical Health Center logo"><span
+          class="brand-text"><strong>MEDICAL</strong><span>HEALTH CENTER</span></span></a>
       <p>Create your patient account and make booking your next clinic visit easier.</p>
       <div class="mini-note">Private. Simple. Patient-first.</div>
     </aside>
@@ -20,21 +24,37 @@
       <p>Fill in your details to get started.</p>
       <form class="form" id="signup-form">
         <div class="form-row">
-          <label>First name<input type="text" name="first-name" placeholder="Juan" required></label>
-          <label>Last name<input type="text" name="last-name" placeholder="Dela Cruz" required></label>
+          <label>First name<input type="text" name="first-name" placeholder="Name" required></label>
+          <label>Last name<input type="text" name="last-name" placeholder="Last name" required></label>
         </div>
         <label>Email address<input type="email" name="email" placeholder="you@example.com" required></label>
         <label>Mobile number<input type="tel" name="phone" placeholder="09XX XXX XXXX" required></label>
         <div class="form-row">
-          <label>Age<input type="number" name="age" min="1" max="120" placeholder="35" required></label>
-          <label>Blood type<select name="blood-type" required><option value="">Select blood type</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></label>
+          <label>Age<input type="number" name="age" min="1" max="120" placeholder="18" required></label>
+          <label>Blood type<select name="blood-type" required>
+              <option value="">Select blood type</option>
+              <option>N/A</option>
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>B-</option>
+              <option>AB+</option>
+              <option>AB-</option>
+              <option>O+</option>
+              <option>O-</option>
+            </select></label>
         </div>
-        <label>Password<input type="password" name="password" placeholder="Create a password" minlength="8" required></label>
-        <button type="submit">Create account</button>
+        <label>Password<input type="password" name="password" placeholder="Create a password" minlength="8"
+            required></label>
+
+        <button class="button" type="submit">
+          Create account
+        </button>
         <p class="form-message" id="auth-message" aria-live="polite"></p>
         <div class="form-note">Already registered? <a href="login.html">Log in</a></div>
       </form>
     </section>
   </main>
 </body>
+
 </html>

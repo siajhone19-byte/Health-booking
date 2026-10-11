@@ -94,6 +94,120 @@ const DOCTOR_PASSWORD = "doctor123";
   }
 
 
+  
+
+const signupForm = document.getElementById("signup-form");
+
+if (signupForm) {
+    signupForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(signupForm);
+
+        const firstName = String(formData.get("first-name") || "").trim();
+        const lastName = String(formData.get("last-name") || "").trim();
+        const email = String(formData.get("email") || "").trim().toLowerCase();
+        const phone = String(formData.get("phone") || "").trim();
+        const age = String(formData.get("age") || "");
+        const bloodType = String(formData.get("blood-type") || "");
+        const password = String(formData.get("password") || "");
+
+        const message = document.querySelector("#auth-message");
+
+        if (!firstName || !lastName || !email ||
+            !phone || !age || !bloodType || !password) {
+            showMessage("Please complete all fields.");
+            return;
+        }
+
+        try {
+            const users = getUsers();
+            const existingAccount = getAccount();
+
+            const emailExists = users.some(
+                user => String(user.email || "").trim().toLowerCase() === email
+            );
+
+            const legacyEmailExists = existingAccount &&
+                String(existingAccount.email || "").trim().toLowerCase() === email;
+
+            if (emailExists || legacyEmailExists ||
+                email === ADMIN_EMAIL || email === DOCTOR_EMAIL) {
+                Swal.fire({
+                icon: "warning",
+                title: "Email Already Registered!",
+                text: "This email is already in use.",
+                showCancelButton: true,
+                confirmButtonText: "Log In",
+                cancelButtonText: "Use Another Email"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "login.html";
+                }
+            });
+                return;
+            }
+
+            const account = {
+                firstName,
+                lastName,
+                name: `${firstName} ${lastName}`,
+                email,
+                phone,
+                age,
+                bloodType,
+                condition: "N/A",
+                password,
+                role: "Patient",
+                department: "Patient Services",
+                joined: new Date().toLocaleDateString(),
+                lastActive: "Now",
+                status: "Active"
+            };
+
+            users.push(account);
+
+            localStorage.setItem(
+                USERS_KEY,
+                JSON.stringify(users)
+            );
+
+            if (message) {
+                message.classList.remove("error");
+                message.textContent =
+                    "Account created successfully! Redirecting to login...";
+            }
+
+            signupForm.reset();
+
+                Swal.fire({
+                title: "Account Created!",
+                text: "You have successfully created an account!",
+                icon: "success",
+                confirmButtonText: "Continue"
+            }).then(() => {
+              window.location.href = "login.html";
+            });
+
+        
+          } catch (error) {
+              console.error("Signup error:", error);
+
+              if (typeof Swal !== "undefined") {
+                  Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: "Unable to save the account. Please try again.",
+                      footer: '<a href="#">Why do I have this issue?</a>'
+                  });
+              } else {
+                  showMessage("Unable to save the account. Please try again.");
+              }
+          }
+    });
+}
+
+
       function setupAuthForms() {
         const loginForm = document.querySelector("#login-form");
 
@@ -112,7 +226,15 @@ const DOCTOR_PASSWORD = "doctor123";
               setDoctorSession(false);
               setAdminSession(true);
 
+                Swal.fire({
+                title: "Good job!",
+                text: "You logged in successfully!",
+                icon: "success",
+                confirmButtonText: "Continue"
+            }).then(() => {
               window.location.href = "admin.html";
+            });
+
               return;
             }
 
@@ -123,7 +245,7 @@ const DOCTOR_PASSWORD = "doctor123";
 
 
               const doctor = {
-                name: "Dr. Juan Dela Cruz",
+                name: "Jhone Lantaca Sia",
                 email: DOCTOR_EMAIL,
                 role: "General Medicine",
                 specialty: "General Medicine"
@@ -131,25 +253,70 @@ const DOCTOR_PASSWORD = "doctor123";
 
               setDoctorSession(doctor, true);
 
+
+
+                Swal.fire({
+                title: "Good job!",
+                text: "You logged in successfully!",
+                icon: "success",
+                confirmButtonText: "Continue"
+            }).then(() => {
               window.location.href = "doctor-dashboard.html";
+            });
+
               return;
             }
 
-            const account = getAccount();
 
-            if (
-              account &&
-              String(account.email || "").trim().toLowerCase() === email &&
-              account.password === password
-            ) {
-              setAdminSession(false);
-              setDoctorSession(false);
-              setSession(true);
 
-              window.location.href = "index.html";
-              return;
+      const users = getUsers();
+
+      const account = users.find((user) =>
+          String(user.email || "").trim().toLowerCase() === email &&
+          user.password === password &&
+          String(user.role || "Patient").toLowerCase() === "patient"
+      );
+
+      const oldAccount = getAccount();
+
+      const matchedOldAccount =
+          !account &&
+          oldAccount &&
+          String(oldAccount.email || "").trim().toLowerCase() === email &&
+          oldAccount.password === password;
+
+      const patientAccount = account || (matchedOldAccount ? oldAccount : null);
+
+
+        if (patientAccount) {
+            localStorage.setItem(
+                ACCOUNT_KEY,
+                JSON.stringify(patientAccount)
+            );
+
+            setSession(true);
+            setAdminSession(false);
+            setDoctorSession(null, false);
+
+            if (typeof Swal !== "undefined") {
+                Swal.fire({
+                    title: "Login successful!",
+                    text: "Welcome back, " + (patientAccount.name || "Patient") + "!",
+                    icon: "success",
+                    confirmButtonText: "Continue"
+                }).then(() => {
+                    window.location.href = "index.html";
+                });
+            } else {
+                window.location.href = "index.html";
             }
 
+            return;
+        }
+
+showMessage(
+    "Incorrect email or password. Please check your credentials."
+);
             showMessage(
               "Incorrect email or password. Please check your credentials."
             );
@@ -158,33 +325,74 @@ const DOCTOR_PASSWORD = "doctor123";
 
       }
 
-
-
   function setupLogout() {
     document.querySelectorAll("[data-logout]").forEach((logoutLink) => {
-      logoutLink.addEventListener("click", (event) => {
-        event.preventDefault();
-        setSession(false);
-        window.location.href = "login.html";
-      });
+        logoutLink.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you really want to log out?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, log out!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    setSession(false);
+                    window.location.href = "login.html";
+                }
+            });
+        });
     });
 
     document.querySelectorAll("[data-admin-logout]").forEach((logoutLink) => {
-      logoutLink.addEventListener("click", (event) => {
-        event.preventDefault();
-        setAdminSession(false);
-        window.location.href = "login.html";
-      });
+        logoutLink.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to log out of your admin account?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, log out!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    setAdminSession(false);
+                    window.location.href = "login.html";
+                }
+            });
+        });
     });
 
     document.querySelectorAll("[data-doctor-logout]").forEach((logoutLink) => {
-      logoutLink.addEventListener("click", (event) => {
-        event.preventDefault();
-        setDoctorSession(false);
-        window.location.href = "login.html";
-      });
+        logoutLink.addEventListener("click", (event) => {
+            event.preventDefault();
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to log out of your doctor account?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, log out!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    setDoctorSession(false);
+                    window.location.href = "login.html";
+                }
+            });
+        });
     });
-  }
+}
+
 
   function setupProfileMenu() {
     const profileToggle = document.querySelector("[data-profile-toggle]");
