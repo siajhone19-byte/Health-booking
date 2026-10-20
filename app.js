@@ -47,6 +47,24 @@ function removeAppointmentRecord(appointment) {
   }
 }
 
+function saveAppointmentRecord(appointment, updates = {}) {
+  const records = getMedicalRecords();
+  let record = records.find((item) => isAppointmentRecordFor(item, appointment));
+  if (!record) {
+    record = {
+      patient: appointment.patient,
+      type: "Appointment",
+      doctor: appointment.doctor || "Health personnel",
+      date: appointment.date,
+      diagnosis: "Pending consultation",
+      prescription: "To be determined after consultation",
+    };
+    records.push(record);
+  }
+  Object.assign(record, updates);
+  localStorage.setItem(RECORDS_KEY, JSON.stringify(records));
+}
+
 function getUsers() {
   return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
 }
@@ -447,7 +465,19 @@ function setupBookingForm() {
   const bookingForm = document.querySelector(".booking-form");
   if (!bookingForm) return;
   const doctorChoice = document.querySelector("#doctor-choice");
-  if (doctorChoice) doctorChoice.disabled = false;
+  if (doctorChoice) {
+    doctorChoice.disabled = false;
+    const existingValues = new Set(Array.from(doctorChoice.options, (option) => option.value));
+    getDoctors().forEach((doctor) => {
+      if (doctor.name && !existingValues.has(doctor.name)) {
+        const option = document.createElement("option");
+        option.value = doctor.name;
+        option.textContent = doctor.name + (doctor.specialty ? " — " + doctor.specialty : "");
+        doctorChoice.appendChild(option);
+        existingValues.add(doctor.name);
+      }
+    });
+  }
 
   bookingForm.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -470,16 +500,7 @@ function setupBookingForm() {
     const appointments = getAppointments();
     appointments.push(appointment);
     localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments));
-    const medicalRecords = getMedicalRecords();
-    medicalRecords.push({
-      patient: appointment.patient,
-      type: "Appointment",
-      doctor: appointment.doctor,
-      date: appointment.date,
-      diagnosis: "Pending consultation",
-      prescription: "To be determined after consultation",
-    });
-    localStorage.setItem(RECORDS_KEY, JSON.stringify(medicalRecords));
+    saveAppointmentRecord(appointment);
     bookingForm.reset();
     const bookingMessage = document.querySelector("#booking-message");
     if (bookingMessage)
@@ -756,10 +777,11 @@ function setupDoctorDashboard() {
       (doctorSelect ? doctors[Number(doctorSelect.value)] : null);
     const doctorAppointments = appointments.filter(
       (appointment) =>
-        appointment.status !== "Cancelled" &&
-        (!activeDoctor ||
-          appointment.doctor === activeDoctor.name ||
-          appointment.doctor === activeDoctor.role),
+        !activeDoctor ||
+        appointment.doctor === activeDoctor.name ||
+        appointment.doctor === activeDoctor.role ||
+        appointment.doctor === activeDoctor.specialty ||
+        (activeDoctor.email === DOCTOR_EMAIL && appointment.doctor === "Doctor"),
     );
     const todayAppointments = doctorAppointments.filter(
       (appointment) => appointment.status !== "Cancelled",
@@ -795,6 +817,18 @@ function setupDoctorDashboard() {
       : '<tr><td colspan="10" class="empty-state">No appointments yet.</td></tr>';
   };
   if (doctorSelect) doctorSelect.addEventListener("change", renderDashboard);
+
+  appointmentsBody.addEventListener("change", (event) => {
+    const input = event.target.closest(".doctor-record-input");
+    if (!input) return;
+    const appointments = getAppointments();
+    const appointment = appointments[Number(input.dataset.doctorAppointmentIndex)];
+    if (!appointment) return;
+    saveAppointmentRecord(appointment, {
+      [input.dataset.recordField]: input.value.trim(),
+    });
+  });
+
   appointmentsBody.addEventListener("click", (event) => {
     const actionButton = event.target.closest("[data-doctor-action]");
     if (!actionButton) return;
@@ -804,10 +838,20 @@ function setupDoctorDashboard() {
     if (!appointment) return;
     if (appointment.status === "Completed") return;
     const isCancelled = actionButton.dataset.doctorAction === "cancel";
+    const row = actionButton.closest("tr");
+    if (row && !isCancelled) {
+      const diagnosis = row.querySelector('[data-record-field="diagnosis"]');
+      const prescription = row.querySelector('[data-record-field="prescription"]');
+      saveAppointmentRecord(appointment, {
+        diagnosis: diagnosis ? diagnosis.value.trim() : "Pending consultation",
+        prescription: prescription ? prescription.value.trim() : "To be determined after consultation",
+      });
+    }
     appointment.status = isCancelled ? "Cancelled" : "Completed";
     localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments));
     if (isCancelled) removeAppointmentRecord(appointment);
     renderDashboard();
+    renderAdminAppointments();
   });
   renderDashboard();
 }
