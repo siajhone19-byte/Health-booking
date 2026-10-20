@@ -8,3 +8,24 @@
 .booking-form{display:grid;gap:16px}.booking-form textarea{min-height:100px;resize:vertical}.booking-message{min-height:1.2em;margin:0;color:var(--green);font-size:.88rem;font-weight:700;text-align:center}
 .info-list{display:grid;gap:18px;margin:22px 0 0;padding:0;list-style:none}.info-list li{display:flex;gap:14px;align-items:flex-start;color:var(--muted);font-size:.9rem}.info-list b{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:var(--mint);color:var(--green)}
 @media(max-width:780px){.booking-layout{grid-template-columns:1fr;padding-bottom:55px}.page-head{padding:40px 0 22px}.panel{padding:22px}}
+
+/* Booking form layout and controls */
+.booking-form label{display:grid;gap:8px;color:var(--ink);font-size:.88rem;font-weight:700}
+.booking-form label span{display:inline;color:var(--muted);font-size:.8rem;font-weight:400}
+.booking-form input,.booking-form select,.booking-form textarea{
+ display:block;width:100%;min-width:0;padding:13px 14px;border:1px solid #d8e5ed;border-radius:10px;
+ background:#fbfdff;color:var(--ink);font:inherit;line-height:1.4;outline:none;transition:border-color .18s,box-shadow .18s;
+}
+.booking-form input:focus,.booking-form select:focus,.booking-form textarea:focus{
+ border-color:var(--green);box-shadow:0 0 0 3px rgba(8,127,140,.13);
+}
+.booking-form input[type="date"]{min-height:48px}
+.booking-form textarea{min-height:112px;resize:vertical}
+.booking-form .form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.booking-form button{width:100%;min-height:50px;margin-top:4px}
+.booking-form button:focus-visible,.booking-form input:focus-visible,.booking-form select:focus-visible,.booking-form textarea:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.booking-message:empty{display:none}
+.booking-message:not(:empty){padding:12px;border-radius:10px;background:var(--mint)}
+.booking-layout>.panel:last-child{position:sticky;top:105px}
+@media(max-width:780px){.booking-form .form-row{grid-template-columns:1fr}.booking-layout>.panel:last-child{position:static}}
+@media(max-width:420px){.panel{padding:18px}.booking-form{gap:14px}.booking-form .form-row{gap:14px}}
