@@ -98,6 +98,20 @@ function showMessage(message, isError = true) {
   messageBox.classList.toggle("error", isError);
 }
 
+function notify(options) {
+  if (typeof window.Swal !== "undefined" && typeof window.Swal.fire === "function") {
+    return window.Swal.fire(options);
+  }
+  window.alert([options.title, options.text].filter(Boolean).join("\\n\\n") || "Please continue.");
+  return Promise.resolve({ isConfirmed: true });
+}
+
+function notifyAndGo(options, destination) {
+  notify(options).then(() => {
+    window.location.href = destination;
+  });
+}
+
 const signupForm = document.getElementById("signup-form");
 
 if (signupForm) {
@@ -154,18 +168,20 @@ if (signupForm) {
         email === ADMIN_EMAIL ||
         email === DOCTOR_EMAIL
       ) {
-        Swal.fire({
-          icon: "warning",
-          title: "Email Already Registered!",
-          text: "This email is already in use.",
-          showCancelButton: true,
-          confirmButtonText: "Log In",
-          cancelButtonText: "Use Another Email",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = "../client/login.html";
-          }
-        });
+        if (typeof window.Swal !== "undefined" && typeof window.Swal.fire === "function") {
+          window.Swal.fire({
+            icon: "warning",
+            title: "Email Already Registered!",
+            text: "This email is already in use.",
+            showCancelButton: true,
+            confirmButtonText: "Log In",
+            cancelButtonText: "Use Another Email",
+          }).then((result) => {
+            if (result.isConfirmed) window.location.href = "login.html";
+          });
+        } else {
+          showMessage("This email is already registered. Please log in or use another email.");
+        }
         return;
       }
 
@@ -198,14 +214,12 @@ if (signupForm) {
 
       signupForm.reset();
 
-      Swal.fire({
+      notifyAndGo({
         title: "Account Created!",
-        text: "You have successfully created an account!",
+        text: "Your patient account has been saved. You can now log in.",
         icon: "success",
         confirmButtonText: "Continue",
-      }).then(() => {
-        window.location.href = "../client/login.html";
-      });
+      }, "login.html");
     } catch (error) {
       console.error("Signup error:", error);
 
@@ -241,14 +255,12 @@ function setupAuthForms() {
         setDoctorSession(false);
         setAdminSession(true);
 
-        Swal.fire({
-          title: "Good job!",
-          text: "You logged in successfully!",
+        notifyAndGo({
+          title: "Admin login successful",
+          text: "Welcome to the clinic administration dashboard.",
           icon: "success",
           confirmButtonText: "Continue",
-        }).then(() => {
-          window.location.href = "../admin/index.html";
-        });
+        }, "../admin/index.html");
 
         return;
       }
@@ -267,14 +279,12 @@ function setupAuthForms() {
 
         setDoctorSession(doctor, true);
 
-        Swal.fire({
-          title: "Good job!",
-          text: "You logged in successfully!",
+        notifyAndGo({
+          title: "Doctor login successful",
+          text: "Welcome to the doctor dashboard.",
           icon: "success",
           confirmButtonText: "Continue",
-        }).then(() => {
-          window.location.href = "../doctor/dashboard.html";
-        });
+        }, "../doctor/dashboard.html");
 
         return;
       }
@@ -309,28 +319,17 @@ function setupAuthForms() {
         setAdminSession(false);
         setDoctorSession(null, false);
 
-        if (typeof Swal !== "undefined") {
-          Swal.fire({
-            title: "Login successful!",
-            text: "Welcome back, " + (patientAccount.name || "Patient") + "!",
-            icon: "success",
-            confirmButtonText: "Continue",
-          }).then(() => {
-            window.location.href = "../client/index.html";
-          });
-        } else {
-          window.location.href = "../client/index.html";
-        }
+        notifyAndGo({
+          title: "Login successful!",
+          text: "Welcome back, " + (patientAccount.name || "Patient") + "!",
+          icon: "success",
+          confirmButtonText: "Continue",
+        }, "index.html");
 
         return;
       }
 
-      showMessage(
-        "Incorrect email or password. Please check your credentials.",
-      );
-      showMessage(
-        "Incorrect email or password. Please check your credentials.",
-      );
+      showMessage("Incorrect email or password. Please check your credentials.");
     });
   }
 }
@@ -533,7 +532,7 @@ function setupStatusChanges() {
   const tableBody = document.querySelector("#appointments-body");
   if (!tableBody) return;
 
-  tableBody.addEventListener("change", (event) => {
+  tableBody.addEventListener("click", (event) => {
     const completeButton = event.target.closest(".complete-button");
     if (!completeButton) return;
     const appointments = getAppointments();
