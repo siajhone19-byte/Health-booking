@@ -47,6 +47,24 @@ function removeAppointmentRecord(appointment) {
   }
 }
 
+function saveAppointmentRecord(appointment, updates = {}) {
+  const records = getMedicalRecords();
+  let record = records.find((item) => isAppointmentRecordFor(item, appointment));
+  if (!record) {
+    record = {
+      patient: appointment.patient,
+      type: "Appointment",
+      doctor: appointment.doctor || "Health personnel",
+      date: appointment.date,
+      diagnosis: "Pending consultation",
+      prescription: "To be determined after consultation",
+    };
+    records.push(record);
+  }
+  Object.assign(record, updates);
+  localStorage.setItem(RECORDS_KEY, JSON.stringify(records));
+}
+
 function getUsers() {
   return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
 }
@@ -96,6 +114,20 @@ function showMessage(message, isError = true) {
   if (!messageBox) return;
   messageBox.textContent = message;
   messageBox.classList.toggle("error", isError);
+}
+
+function notify(options) {
+  if (typeof window.Swal !== "undefined" && typeof window.Swal.fire === "function") {
+    return window.Swal.fire(options);
+  }
+  window.alert([options.title, options.text].filter(Boolean).join("\\n\\n") || "Please continue.");
+  return Promise.resolve({ isConfirmed: true });
+}
+
+function notifyAndGo(options, destination) {
+  notify(options).then(() => {
+    window.location.href = destination;
+  });
 }
 
 const signupForm = document.getElementById("signup-form");
@@ -154,18 +186,20 @@ if (signupForm) {
         email === ADMIN_EMAIL ||
         email === DOCTOR_EMAIL
       ) {
-        Swal.fire({
-          icon: "warning",
-          title: "Email Already Registered!",
-          text: "This email is already in use.",
-          showCancelButton: true,
-          confirmButtonText: "Log In",
-          cancelButtonText: "Use Another Email",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = "../client/login.html";
-          }
-        });
+        if (typeof window.Swal !== "undefined" && typeof window.Swal.fire === "function") {
+          window.Swal.fire({
+            icon: "warning",
+            title: "Email Already Registered!",
+            text: "This email is already in use.",
+            showCancelButton: true,
+            confirmButtonText: "Log In",
+            cancelButtonText: "Use Another Email",
+          }).then((result) => {
+            if (result.isConfirmed) window.location.href = "login.html";
+          });
+        } else {
+          showMessage("This email is already registered. Please log in or use another email.");
+        }
         return;
       }
 
@@ -198,14 +232,12 @@ if (signupForm) {
 
       signupForm.reset();
 
-      Swal.fire({
+      notifyAndGo({
         title: "Account Created!",
-        text: "You have successfully created an account!",
+        text: "Your patient account has been saved. You can now log in.",
         icon: "success",
         confirmButtonText: "Continue",
-      }).then(() => {
-        window.location.href = "../client/login.html";
-      });
+      }, "login.html");
     } catch (error) {
       console.error("Signup error:", error);
 
@@ -241,14 +273,12 @@ function setupAuthForms() {
         setDoctorSession(false);
         setAdminSession(true);
 
-        Swal.fire({
-          title: "Good job!",
-          text: "You logged in successfully!",
+        notifyAndGo({
+          title: "Admin login successful",
+          text: "Welcome to the clinic administration dashboard.",
           icon: "success",
           confirmButtonText: "Continue",
-        }).then(() => {
-          window.location.href = "../admin/index.html";
-        });
+        }, "../admin/index.html");
 
         return;
       }
@@ -267,19 +297,42 @@ function setupAuthForms() {
 
         setDoctorSession(doctor, true);
 
-        Swal.fire({
-          title: "Good job!",
-          text: "You logged in successfully!",
+        notifyAndGo({
+          title: "Doctor login successful",
+          text: "Welcome to the doctor dashboard.",
           icon: "success",
           confirmButtonText: "Continue",
-        }).then(() => {
-          window.location.href = "../doctor/dashboard.html";
-        });
+        }, "../doctor/dashboard.html");
 
         return;
       }
 
       const users = getUsers();
+
+      const staffAccount = users.find(
+        (user) =>
+          String(user.email || "").trim().toLowerCase() === email &&
+          user.password === password &&
+          ["doctor", "nurse", "midwife"].includes(String(user.role || "").toLowerCase()),
+      );
+      if (staffAccount) {
+        setSession(false);
+        setAdminSession(false);
+        const doctor = {
+          name: staffAccount.name,
+          email: staffAccount.email,
+          role: staffAccount.role,
+          specialty: staffAccount.department || staffAccount.role,
+        };
+        setDoctorSession(doctor, true);
+        notifyAndGo({
+          title: "Staff login successful",
+          text: "Welcome, " + staffAccount.name + ".",
+          icon: "success",
+          confirmButtonText: "Continue",
+        }, "../doctor/dashboard.html");
+        return;
+      }
 
       const account = users.find(
         (user) =>
@@ -309,28 +362,17 @@ function setupAuthForms() {
         setAdminSession(false);
         setDoctorSession(null, false);
 
-        if (typeof Swal !== "undefined") {
-          Swal.fire({
-            title: "Login successful!",
-            text: "Welcome back, " + (patientAccount.name || "Patient") + "!",
-            icon: "success",
-            confirmButtonText: "Continue",
-          }).then(() => {
-            window.location.href = "../client/index.html";
-          });
-        } else {
-          window.location.href = "../client/index.html";
-        }
+        notifyAndGo({
+          title: "Login successful!",
+          text: "Welcome back, " + (patientAccount.name || "Patient") + "!",
+          icon: "success",
+          confirmButtonText: "Continue",
+        }, "index.html");
 
         return;
       }
 
-      showMessage(
-        "Incorrect email or password. Please check your credentials.",
-      );
-      showMessage(
-        "Incorrect email or password. Please check your credentials.",
-      );
+      showMessage("Incorrect email or password. Please check your credentials.");
     });
   }
 }
@@ -340,7 +382,7 @@ function setupLogout() {
     logoutLink.addEventListener("click", (event) => {
       event.preventDefault();
 
-      Swal.fire({
+      notify({
         title: "Are you sure?",
         text: "Do you really want to log out?",
         icon: "warning",
@@ -362,7 +404,7 @@ function setupLogout() {
     logoutLink.addEventListener("click", (event) => {
       event.preventDefault();
 
-      Swal.fire({
+      notify({
         title: "Are you sure?",
         text: "Do you want to log out of your admin account?",
         icon: "warning",
@@ -384,7 +426,7 @@ function setupLogout() {
     logoutLink.addEventListener("click", (event) => {
       event.preventDefault();
 
-      Swal.fire({
+      notify({
         title: "Are you sure?",
         text: "Do you want to log out of your doctor account?",
         icon: "warning",
@@ -448,7 +490,19 @@ function setupBookingForm() {
   const bookingForm = document.querySelector(".booking-form");
   if (!bookingForm) return;
   const doctorChoice = document.querySelector("#doctor-choice");
-  if (doctorChoice) doctorChoice.disabled = false;
+  if (doctorChoice) {
+    doctorChoice.disabled = false;
+    const existingValues = new Set(Array.from(doctorChoice.options, (option) => option.value));
+    getDoctors().forEach((doctor) => {
+      if (doctor.name && !existingValues.has(doctor.name)) {
+        const option = document.createElement("option");
+        option.value = doctor.name;
+        option.textContent = doctor.name + (doctor.specialty ? " — " + doctor.specialty : "");
+        doctorChoice.appendChild(option);
+        existingValues.add(doctor.name);
+      }
+    });
+  }
 
   bookingForm.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -471,16 +525,7 @@ function setupBookingForm() {
     const appointments = getAppointments();
     appointments.push(appointment);
     localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments));
-    const medicalRecords = getMedicalRecords();
-    medicalRecords.push({
-      patient: appointment.patient,
-      type: "Appointment",
-      doctor: appointment.doctor,
-      date: appointment.date,
-      diagnosis: "Pending consultation",
-      prescription: "To be determined after consultation",
-    });
-    localStorage.setItem(RECORDS_KEY, JSON.stringify(medicalRecords));
+    saveAppointmentRecord(appointment);
     bookingForm.reset();
     const bookingMessage = document.querySelector("#booking-message");
     if (bookingMessage)
@@ -533,7 +578,7 @@ function setupStatusChanges() {
   const tableBody = document.querySelector("#appointments-body");
   if (!tableBody) return;
 
-  tableBody.addEventListener("change", (event) => {
+  tableBody.addEventListener("click", (event) => {
     const completeButton = event.target.closest(".complete-button");
     if (!completeButton) return;
     const appointments = getAppointments();
@@ -757,10 +802,11 @@ function setupDoctorDashboard() {
       (doctorSelect ? doctors[Number(doctorSelect.value)] : null);
     const doctorAppointments = appointments.filter(
       (appointment) =>
-        appointment.status !== "Cancelled" &&
-        (!activeDoctor ||
-          appointment.doctor === activeDoctor.name ||
-          appointment.doctor === activeDoctor.role),
+        !activeDoctor ||
+        appointment.doctor === activeDoctor.name ||
+        appointment.doctor === activeDoctor.role ||
+        appointment.doctor === activeDoctor.specialty ||
+        (activeDoctor.email === DOCTOR_EMAIL && appointment.doctor === "Doctor"),
     );
     const todayAppointments = doctorAppointments.filter(
       (appointment) => appointment.status !== "Cancelled",
@@ -796,6 +842,18 @@ function setupDoctorDashboard() {
       : '<tr><td colspan="10" class="empty-state">No appointments yet.</td></tr>';
   };
   if (doctorSelect) doctorSelect.addEventListener("change", renderDashboard);
+
+  appointmentsBody.addEventListener("change", (event) => {
+    const input = event.target.closest(".doctor-record-input");
+    if (!input) return;
+    const appointments = getAppointments();
+    const appointment = appointments[Number(input.dataset.doctorAppointmentIndex)];
+    if (!appointment) return;
+    saveAppointmentRecord(appointment, {
+      [input.dataset.recordField]: input.value.trim(),
+    });
+  });
+
   appointmentsBody.addEventListener("click", (event) => {
     const actionButton = event.target.closest("[data-doctor-action]");
     if (!actionButton) return;
@@ -805,10 +863,20 @@ function setupDoctorDashboard() {
     if (!appointment) return;
     if (appointment.status === "Completed") return;
     const isCancelled = actionButton.dataset.doctorAction === "cancel";
+    const row = actionButton.closest("tr");
+    if (row && !isCancelled) {
+      const diagnosis = row.querySelector('[data-record-field="diagnosis"]');
+      const prescription = row.querySelector('[data-record-field="prescription"]');
+      saveAppointmentRecord(appointment, {
+        diagnosis: diagnosis ? diagnosis.value.trim() : "Pending consultation",
+        prescription: prescription ? prescription.value.trim() : "To be determined after consultation",
+      });
+    }
     appointment.status = isCancelled ? "Cancelled" : "Completed";
     localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments));
     if (isCancelled) removeAppointmentRecord(appointment);
     renderDashboard();
+    renderAdminAppointments();
   });
   renderDashboard();
 }
@@ -979,30 +1047,39 @@ function setupUserManagementPage() {
     event.preventDefault();
     const formData = new FormData(userForm);
     const users = getUsers();
-    const name = String(formData.get("name")).trim();
-    const email = String(formData.get("email")).trim().toLowerCase();
-    const role = String(formData.get("role"));
-    const department = String(formData.get("department") || "-");
+    const name = String(formData.get("name") || "").trim();
+    const email = String(formData.get("email") || "").trim().toLowerCase();
+    const role = String(formData.get("role") || "");
+    const department = String(formData.get("department") || "-").trim();
+    const password = String(formData.get("password") || "");
+    const message = document.querySelector("#user-message");
+
+    if (!name || !email || !role || password.length < 8) {
+      if (message) message.textContent = "Enter a name, email, role, and password with at least 8 characters.";
+      return;
+    }
+    if (users.some((user) => String(user.email || "").trim().toLowerCase() === email)) {
+      if (message) message.textContent = "That email is already registered.";
+      return;
+    }
+
     users.push({
-      name,
-      email,
-      role,
-      department,
-      joined: "Today",
-      lastActive: "Now",
+      name, email, role, department, password,
+      joined: new Date().toLocaleDateString(),
+      lastActive: "Never",
       status: "Active",
     });
     if (["Doctor", "Nurse", "Midwife"].includes(role)) {
       const doctors = getDoctors();
-      if (!doctors.some((doctor) => doctor.email === email))
-        doctors.push({ name, role, specialty: role, email, contact: "-" });
+      if (!doctors.some((doctor) => String(doctor.email || "").toLowerCase() === email)) {
+        doctors.push({ name, role, specialty: department || role, email, contact: "-", password });
+      }
       localStorage.setItem(DOCTORS_KEY, JSON.stringify(doctors));
     }
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
     userForm.reset();
     if (formPanel) formPanel.classList.remove("open");
-    document.querySelector("#user-message").textContent =
-      "User added successfully.";
+    if (message) message.textContent = "User added successfully. They can now log in with their email and password.";
     renderUsers();
   });
   searchInput?.addEventListener("input", renderUsers);
