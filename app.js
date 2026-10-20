@@ -309,6 +309,31 @@ function setupAuthForms() {
 
       const users = getUsers();
 
+      const staffAccount = users.find(
+        (user) =>
+          String(user.email || "").trim().toLowerCase() === email &&
+          user.password === password &&
+          ["doctor", "nurse", "midwife"].includes(String(user.role || "").toLowerCase()),
+      );
+      if (staffAccount) {
+        setSession(false);
+        setAdminSession(false);
+        const doctor = {
+          name: staffAccount.name,
+          email: staffAccount.email,
+          role: staffAccount.role,
+          specialty: staffAccount.department || staffAccount.role,
+        };
+        setDoctorSession(doctor, true);
+        notifyAndGo({
+          title: "Staff login successful",
+          text: "Welcome, " + staffAccount.name + ".",
+          icon: "success",
+          confirmButtonText: "Continue",
+        }, "../doctor/dashboard.html");
+        return;
+      }
+
       const account = users.find(
         (user) =>
           String(user.email || "")
@@ -357,7 +382,7 @@ function setupLogout() {
     logoutLink.addEventListener("click", (event) => {
       event.preventDefault();
 
-      Swal.fire({
+      notify({
         title: "Are you sure?",
         text: "Do you really want to log out?",
         icon: "warning",
@@ -379,7 +404,7 @@ function setupLogout() {
     logoutLink.addEventListener("click", (event) => {
       event.preventDefault();
 
-      Swal.fire({
+      notify({
         title: "Are you sure?",
         text: "Do you want to log out of your admin account?",
         icon: "warning",
@@ -401,7 +426,7 @@ function setupLogout() {
     logoutLink.addEventListener("click", (event) => {
       event.preventDefault();
 
-      Swal.fire({
+      notify({
         title: "Are you sure?",
         text: "Do you want to log out of your doctor account?",
         icon: "warning",
@@ -1022,30 +1047,39 @@ function setupUserManagementPage() {
     event.preventDefault();
     const formData = new FormData(userForm);
     const users = getUsers();
-    const name = String(formData.get("name")).trim();
-    const email = String(formData.get("email")).trim().toLowerCase();
-    const role = String(formData.get("role"));
-    const department = String(formData.get("department") || "-");
+    const name = String(formData.get("name") || "").trim();
+    const email = String(formData.get("email") || "").trim().toLowerCase();
+    const role = String(formData.get("role") || "");
+    const department = String(formData.get("department") || "-").trim();
+    const password = String(formData.get("password") || "");
+    const message = document.querySelector("#user-message");
+
+    if (!name || !email || !role || password.length < 8) {
+      if (message) message.textContent = "Enter a name, email, role, and password with at least 8 characters.";
+      return;
+    }
+    if (users.some((user) => String(user.email || "").trim().toLowerCase() === email)) {
+      if (message) message.textContent = "That email is already registered.";
+      return;
+    }
+
     users.push({
-      name,
-      email,
-      role,
-      department,
-      joined: "Today",
-      lastActive: "Now",
+      name, email, role, department, password,
+      joined: new Date().toLocaleDateString(),
+      lastActive: "Never",
       status: "Active",
     });
     if (["Doctor", "Nurse", "Midwife"].includes(role)) {
       const doctors = getDoctors();
-      if (!doctors.some((doctor) => doctor.email === email))
-        doctors.push({ name, role, specialty: role, email, contact: "-" });
+      if (!doctors.some((doctor) => String(doctor.email || "").toLowerCase() === email)) {
+        doctors.push({ name, role, specialty: department || role, email, contact: "-", password });
+      }
       localStorage.setItem(DOCTORS_KEY, JSON.stringify(doctors));
     }
     localStorage.setItem(USERS_KEY, JSON.stringify(users));
     userForm.reset();
     if (formPanel) formPanel.classList.remove("open");
-    document.querySelector("#user-message").textContent =
-      "User added successfully.";
+    if (message) message.textContent = "User added successfully. They can now log in with their email and password.";
     renderUsers();
   });
   searchInput?.addEventListener("input", renderUsers);
