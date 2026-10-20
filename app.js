@@ -163,7 +163,7 @@ if (signupForm) {
           cancelButtonText: "Use Another Email",
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.href = "login.html";
+            window.location.href = "../client/login.html";
           }
         });
         return;
@@ -204,7 +204,7 @@ if (signupForm) {
         icon: "success",
         confirmButtonText: "Continue",
       }).then(() => {
-        window.location.href = "login.html";
+        window.location.href = "../client/login.html";
       });
     } catch (error) {
       console.error("Signup error:", error);
@@ -247,7 +247,7 @@ function setupAuthForms() {
           icon: "success",
           confirmButtonText: "Continue",
         }).then(() => {
-          window.location.href = "admin.html";
+          window.location.href = "../admin/index.html";
         });
 
         return;
@@ -273,7 +273,7 @@ function setupAuthForms() {
           icon: "success",
           confirmButtonText: "Continue",
         }).then(() => {
-          window.location.href = "doctor-dashboard.html";
+          window.location.href = "../doctor/dashboard.html";
         });
 
         return;
@@ -316,10 +316,10 @@ function setupAuthForms() {
             icon: "success",
             confirmButtonText: "Continue",
           }).then(() => {
-            window.location.href = "index.html";
+            window.location.href = "../client/index.html";
           });
         } else {
-          window.location.href = "index.html";
+          window.location.href = "../client/index.html";
         }
 
         return;
@@ -352,7 +352,7 @@ function setupLogout() {
       }).then((result) => {
         if (result.isConfirmed) {
           setSession(false);
-          window.location.href = "login.html";
+          window.location.href = "../client/login.html";
         }
       });
     });
@@ -374,7 +374,7 @@ function setupLogout() {
       }).then((result) => {
         if (result.isConfirmed) {
           setAdminSession(false);
-          window.location.href = "login.html";
+          window.location.href = "../client/login.html";
         }
       });
     });
@@ -396,7 +396,7 @@ function setupLogout() {
       }).then((result) => {
         if (result.isConfirmed) {
           setDoctorSession(false);
-          window.location.href = "login.html";
+          window.location.href = "../client/login.html";
         }
       });
     });
@@ -416,19 +416,19 @@ function setupProfileMenu() {
 
 function protectAdminPage() {
   if (document.querySelector(".admin-body") && !isAdminLoggedIn()) {
-    window.location.href = "admin-login.html";
+    window.location.href = "../client/login.html";
   }
 }
 
 function protectDoctorPage() {
   if (document.querySelector(".doctor-body") && !isDoctorLoggedIn()) {
-    window.location.href = "doctor-login.html";
+    window.location.href = "../client/login.html";
   }
 }
 
 function protectBookingPage() {
   if (document.querySelector(".booking-form") && !isLoggedIn()) {
-    window.location.href = "login.html";
+    window.location.href = "../client/login.html";
     return;
   }
 
